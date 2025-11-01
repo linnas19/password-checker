@@ -3,126 +3,328 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Проверка пароля</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             max-width: 600px;
-            margin: 50px auto;
+            margin: 0 auto;
             padding: 20px;
-            background-color: #f0f8ff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
+        
         .container {
             background: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
+        
         h1 {
-            color: #2c3e50;
+            color: #333;
             text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
         }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
         .password-input {
             width: 100%;
             padding: 15px;
             font-size: 18px;
             border: 2px solid #ddd;
-            border-radius: 5px;
-            margin: 20px 0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
         }
+        
+        .password-input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
         .check-btn {
             width: 100%;
             padding: 15px;
-            background: #3498db;
+            background: #4CAF50;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 18px;
             cursor: pointer;
+            transition: background 0.3s;
         }
+        
         .check-btn:hover {
-            background: #2980b9;
+            background: #45a049;
         }
+        
         .result {
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 5px;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
             text-align: center;
             font-weight: bold;
             font-size: 18px;
+            display: none;
         }
+        
         .success {
             background: #d4edda;
             color: #155724;
-            border: 1px solid #c3e6cb;
+            border: 2px solid #c3e6cb;
+            display: block;
         }
+        
         .error {
             background: #f8d7da;
             color: #721c24;
-            border: 1px solid #f5c6cb;
+            border: 2px solid #f5c6cb;
+            display: block;
         }
+        
         .rules {
-            background: #fff3cd;
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 5px solid #2196F3;
+        }
+        
+        .rules h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        
+        .rules ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .rules li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .history {
+            margin-top: 25px;
             padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .history h3 {
+            margin-top: 0;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+        
+        .history-item {
+            padding: 8px 12px;
+            margin: 5px 0;
             border-radius: 5px;
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .history-success {
+            background: #d1edff;
+            border-left: 4px solid #007bff;
+        }
+        
+        .history-error {
+            background: #ffeaea;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .password-mask {
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+        
+        .clear-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .clear-btn:hover {
+            background: #ff5252;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Проверка надежности пароля</h1>
+        <h1>🔐 Проверка надежности пароля</h1>
+        <p class="subtitle">Практическое задание для урока цифровой грамотности</p>
         
         <div class="rules">
-            <h3>Правила надежного пароля:</h3>
+            <h3>📋 Правила надежного пароля:</h3>
             <ul>
-                <li>Не менее 8 символов</li>
-                <li>Заглавные и строчные буквы</li>
-                <li>Минимум одна цифра</li>
-                <li>Минимум один специальный символ</li>
+                <li><strong>Длина:</strong> Не менее 8 символов</li>
+                <li><strong>Регистр:</strong> Заглавные и строчные буквы</li>
+                <li><strong>Цифры:</strong> Минимум одна цифра</li>
+                <li><strong>Символы:</strong> Специальные знаки (!@#$% и др.)</li>
+                <li><strong>Безопасность:</strong> Не используйте простые слова</li>
             </ul>
         </div>
 
-        <input type="text" id="passwordInput" class="password-input" placeholder="Введите пароль для проверки...">
-        <button onclick="checkPassword()" class="check-btn">Проверить пароль</button>
+        <div class="input-group">
+            <input type="text" id="passwordInput" class="password-input" 
+                   placeholder="Введите пароль для проверки..." autocomplete="off">
+            <button onclick="checkPassword()" class="check-btn">🔍 Проверить пароль</button>
+        </div>
         
         <div id="result" class="result"></div>
+        
+        <div class="history">
+            <h3>📊 История проверок</h3>
+            <div id="passwordHistory"></div>
+            <button onclick="clearHistory()" class="clear-btn">Очистить историю</button>
+        </div>
     </div>
 
     <script>
+        // Массив для хранения истории паролей
+        let passwordHistory = [];
+        
+        // Функция проверки пароля
         function checkPassword() {
-            const password = document.getElementById('passwordInput').value;
+            const password = document.getElementById('passwordInput').value.trim();
             const resultDiv = document.getElementById('result');
             
-            // Проверяем правила
-            const hasLength = password.length >= 8;
-            const hasUpper = /[A-ZА-Я]/.test(password);
-            const hasLower = /[a-zа-я]/.test(password);
-            const hasDigit = /\d/.test(password);
-            const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
-            
-            // Все правила выполнены?
-            const isStrong = hasLength && hasUpper && hasLower && hasDigit && hasSpecial;
-            
-            if (isStrong) {
-                resultDiv.textContent = '✅ Отлично! Пароль надежный';
-                resultDiv.className = 'result success';
-            } else {
-                resultDiv.textContent = '❌ Пароль не соответствует требованиям';
-                resultDiv.className = 'result error';
+            if (!password) {
+                showResult('Введите пароль для проверки', 'error');
+                return;
             }
             
-            // Очищаем поле для следующего участника
+            // Проверяем правила пароля
+            const checks = {
+                length: password.length >= 8,
+                uppercase: /[A-ZА-Я]/.test(password),
+                lowercase: /[a-zа-я]/.test(password),
+                digit: /\d/.test(password),
+                special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+            };
+            
+            // Проверяем, все ли правила выполнены
+            const isStrong = Object.values(checks).every(check => check === true);
+            
+            // Добавляем в историю
+            addToHistory(password, isStrong);
+            
+            // Показываем результат
+            if (isStrong) {
+                showResult('✅ Отлично! Пароль соответствует всем требованиям безопасности', 'success');
+            } else {
+                const errorMessage = '❌ Пароль нужно улучшить:\n' + getErrorDetails(checks);
+                showResult(errorMessage, 'error');
+            }
+            
+            // Очищаем поле ввода
             document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordInput').focus();
         }
         
-        // Поддержка клавиши Enter
+        // Функция показа результата
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.className = 'result ' + type;
+        }
+        
+        // Функция получения деталей ошибок
+        function getErrorDetails(checks) {
+            const errors = [];
+            if (!checks.length) errors.push('• Сделайте пароль длиннее (минимум 8 символов)');
+            if (!checks.uppercase) errors.push('• Добавьте заглавные буквы');
+            if (!checks.lowercase) errors.push('• Добавьте строчные буквы');
+            if (!checks.digit) errors.push('• Добавьте цифры');
+            if (!checks.special) errors.push('• Добавьте специальные символы (!@#$% и др.)');
+            return errors.join('\n');
+        }
+        
+        // Функция добавления в историю
+        function addToHistory(password, isStrong) {
+            const timestamp = new Date().toLocaleTimeString();
+            
+            passwordHistory.unshift({
+                password: password,
+                timestamp: timestamp,
+                isStrong: isStrong
+            });
+            
+            // Ограничиваем историю 15 записями
+            if (passwordHistory.length > 15) {
+                passwordHistory = passwordHistory.slice(0, 15);
+            }
+            
+            updateHistoryDisplay();
+        }
+        
+        // Функция обновления отображения истории
+        function updateHistoryDisplay() {
+            const historyDiv = document.getElementById('passwordHistory');
+            
+            if (passwordHistory.length === 0) {
+                historyDiv.innerHTML = '<p style="text-align: center; color: #666;">Здесь будут отображаться проверенные пароли</p>';
+                return;
+            }
+            
+            historyDiv.innerHTML = passwordHistory.map(item => `
+                <div class="history-item ${item.isStrong ? 'history-success' : 'history-error'}">
+                    <div>
+                        <span class="password-mask">${'•'.repeat(Math.min(item.password.length, 12))}</span>
+                        <small style="color: #666; margin-left: 10px;">${item.timestamp}</small>
+                    </div>
+                    <span>${item.isStrong ? '✅' : '❌'}</span>
+                </div>
+            `).join('');
+        }
+        
+        // Функция очистки истории
+        function clearHistory() {
+            passwordHistory = [];
+            updateHistoryDisplay();
+            showResult('История очищена', 'success');
+            setTimeout(() => {
+                document.getElementById('result').style.display = 'none';
+            }, 2000);
+        }
+        
+        // Обработчик нажатия Enter
         document.getElementById('passwordInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 checkPassword();
             }
         });
+        
+        // Фокусировка на поле ввода при загрузке
+        document.getElementById('passwordInput').focus();
+        
+        // Инициализация отображения истории
+        updateHistoryDisplay();
     </script>
 </body>
-
 </html>
+
