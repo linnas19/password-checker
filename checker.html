@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Проверка пароля</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .check-btn {
+            width: 100%;
+            padding: 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .check-btn:hover {
+            background: #2980b9;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .rules {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Проверка надежности пароля</h1>
+        
+        <div class="rules">
+            <h3>Правила надежного пароля:</h3>
+            <ul>
+                <li>Не менее 8 символов</li>
+                <li>Заглавные и строчные буквы</li>
+                <li>Минимум одна цифра</li>
+                <li>Минимум один специальный символ</li>
+            </ul>
+        </div>
+
+        <input type="text" id="passwordInput" class="password-input" placeholder="Введите пароль для проверки...">
+        <button onclick="checkPassword()" class="check-btn">Проверить пароль</button>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const resultDiv = document.getElementById('result');
+            
+            // Проверяем правила
+            const hasLength = password.length >= 8;
+            const hasUpper = /[A-ZА-Я]/.test(password);
+            const hasLower = /[a-zа-я]/.test(password);
+            const hasDigit = /\d/.test(password);
+            const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+            
+            // Все правила выполнены?
+            const isStrong = hasLength && hasUpper && hasLower && hasDigit && hasSpecial;
+            
+            if (isStrong) {
+                resultDiv.textContent = '✅ Отлично! Пароль надежный';
+                resultDiv.className = 'result success';
+            } else {
+                resultDiv.textContent = '❌ Пароль не соответствует требованиям';
+                resultDiv.className = 'result error';
+            }
+            
+            // Очищаем поле для следующего участника
+            document.getElementById('passwordInput').value = '';
+        }
+        
+        // Поддержка клавиши Enter
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
